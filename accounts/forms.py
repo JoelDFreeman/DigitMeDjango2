@@ -22,3 +22,46 @@ class CreateUserForm(UserCreationForm):
 		model = User
 		fields = ['username', 'email', 'password1', 'password2']
 
+class ProductForm(forms.ModelForm):
+	class Meta:
+		model = Product
+		fields = [
+			'name',
+			'price',
+			'category',
+			'description'
+		]
+
+class OrderCreateForm(forms.ModelForm):
+	class Meta:
+		model = Order
+		fields = [
+			'customer',
+			'product',
+			'status',
+		]
+
+class TagCreateForm(forms.ModelForm):
+	class Meta:
+		model = Tag
+		fields = [
+			'name',
+		]
+
+class CustomerCreateForm(forms.ModelForm):
+	class Meta:
+		model = Customer
+		fields = [
+			'name',
+			'phone',
+			'email',
+			'profile_pic'
+		]
+
+class ProductImageForm(forms.ModelForm):
+	class Meta:
+		model = ProductImage
+		fields = [
+			'name',
+			'product_Main_Img',
+		]		
