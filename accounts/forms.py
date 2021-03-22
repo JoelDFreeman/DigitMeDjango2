@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .models import *
 
@@ -64,4 +65,11 @@ class ProductImageForm(forms.ModelForm):
 		fields = [
 			'name',
 			'product_Main_Img',
-		]		
+		]	
+
+class UserListView(forms.ModelForm):
+    model = Customer
+    template_name = 'customers.html'  # Default: <app_label>/<model_name>_list.html
+    context_object_name = 'customers'  # Default: object_list
+    paginate_by = 5
+    queryset = Customer.objects.all()  # Default: Model.objects.all()			

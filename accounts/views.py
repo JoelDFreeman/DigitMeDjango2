@@ -14,7 +14,7 @@ from .models import *
 from .forms import *
 from .filters import *
 from .decorators import unauthenticated_user, allowed_users, admin_only
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @login_required(login_url='login')
 @admin_only
@@ -127,10 +127,27 @@ def home(request):
 	total_orders = orders.count()
 	delivered = orders.filter(status='Delivered').count()
 	pending = orders.filter(status='Pending').count()
+	page = request.GET.get('page', 1)
+
+	paginator = Paginator(customers, 5)	
+	try:
+		customers = paginator.page(page)
+	except PageNotAnInteger:
+		customers = paginator.page(1)
+	except EmptyPage:
+		customers= paginator.page(paginator.num_pages)
+
+	paginator_two = Paginator(orders, 5)	
+	try:
+		orders = paginator_two.page(page)
+	except PageNotAnInteger:
+		orders = paginator_two.page(1)
+	except EmptyPage:
+		orders= paginator_two.page(paginator_two.num_pages)	
 
 	context = {'orders':orders, 'customers':customers,
 	'total_orders':total_orders,'delivered':delivered,
-	'pending':pending }
+	'pending':pending, 'total_customers':total_customers, 'page':page, 'paginator':paginator, 'paginator_two':paginator_two }
 
 	return render(request, 'accounts/dashboard.html', context)
 
@@ -170,7 +187,17 @@ def Orders(request):
 	orders = Order.objects.all()
 	orders_count = orders.count()
 	myFilter = OrderFilter(request.GET, queryset=orders)
-	orders = myFilter.qs 
+	orders = myFilter.qs
+
+	page = request.GET.get('page', 1)
+
+	paginator = Paginator(orders, 5)	
+	try:
+		orders = paginator.page(page)
+	except PageNotAnInteger:
+		orders = paginator.page(1)
+	except EmptyPage:
+		orders = paginator.page(paginator.num_pages) 
 
 	context = {'orders_count':orders_count,
 	'myFilter':myFilter,'orders':orders}
@@ -185,6 +212,15 @@ def products(request):
 	myFilter = ProductFilter(request.GET, queryset=products)
 	products = myFilter.qs 
 
+	page = request.GET.get('page', 1)
+
+	paginator = Paginator(products, 5)	
+	try:
+		products = paginator.page(page)
+	except PageNotAnInteger:
+		products = paginator.page(1)
+	except EmptyPage:
+		products = paginator.page(paginator.num_pages)
 	context = {'products_count':products_count,
 	'myFilter':myFilter,'products':products}
 
@@ -209,12 +245,21 @@ def customer(request, pk_test):
 @allowed_users(allowed_roles=['admin'])
 def customers(request):
 	customers = Customer.objects.all()
-
-	myFilter = OrderFilter(request.GET, queryset=customers)
+	page = request.GET.get('page', 1)
+	myFilter = CustomerFilter(request.GET, queryset=customers)
 	customers = myFilter.qs 
 
+	paginator = Paginator(customers, 5)	
+	try:
+		customers = paginator.page(page)
+	except PageNotAnInteger:
+		customers = paginator.page(1)
+	except EmptyPage:
+		customers = paginator.page(paginator.num_pages)
+
 	context = {'customers':customers,'myFilter':myFilter}
-	return render(request, 'accounts/customers.html',context)	
+	return render(request, 'accounts/customers.html',context)
+
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
@@ -298,8 +343,19 @@ def deleteOrder(request, pk):
 def deleteProduct(request, pk):
 	product = Product.objects.get(id=pk)
 	if request.method == "POST":
-		order.delete()
+		product.delete()
 		return redirect('/')
 
 	context = {'item':product}
+	return render(request, 'accounts/delete.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def deleteCustomer(request, pk):
+	customer = Customer.objects.get(id=pk)
+	if request.method == "POST":
+		customer.delete()
+		return redirect('/')
+
+	context = {'item':customer}
 	return render(request, 'accounts/delete.html', context)
