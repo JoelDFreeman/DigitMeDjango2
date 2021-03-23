@@ -32,6 +32,8 @@ urlpatterns = [
 
     path('tag_create/', views.tag_create, name='tag_create'),
 
+    path('visualisations/', views.visualisations, name='visualisations'),
+
     path('create_order/<str:pk>/', views.createOrder, name="create_order"),
     path('update_order/<str:pk>/', views.updateOrder, name="update_order"),
     path('delete_order/<str:pk>/', views.deleteOrder, name="delete_order"),

@@ -56,8 +56,18 @@ class CustomerCreateForm(forms.ModelForm):
 			'name',
 			'phone',
 			'email',
-			'profile_pic'
+			'profile_pic',
+			'customeraddress'
 		]
+
+class CustomerAddressCreateForm(forms.ModelForm):
+	class Meta:
+		model = CustomerAddress
+		fields = [
+			'addressline1',
+			'county',
+			'postcode',
+		]		
 
 class ProductImageForm(forms.ModelForm):
 	class Meta:

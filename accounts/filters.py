@@ -36,4 +36,7 @@ class CustomerFilter(django_filters.FilterSet):
 		fields = '__all__'
 		exclude = ['date_created', 'profile_pic', 'note']		
 
+
+
+
 				

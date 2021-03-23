@@ -248,7 +248,15 @@ def customers(request):
 	page = request.GET.get('page', 1)
 	myFilter = CustomerFilter(request.GET, queryset=customers)
 	customers = myFilter.qs 
+	form = CustomerCreateForm()
+	if request.method == 'POST':
+		form = CustomerCreateForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			
+			messages.success(request, 'Customer Created ')
 
+			return redirect('login')
 	paginator = Paginator(customers, 5)	
 	try:
 		customers = paginator.page(page)
@@ -359,3 +367,19 @@ def deleteCustomer(request, pk):
 
 	context = {'item':customer}
 	return render(request, 'accounts/delete.html', context)
+
+def visualisations(request):
+	orders = Order.objects.all()
+	customers = Customer.objects.all()
+
+	total_customers = customers.count()
+
+	total_orders = orders.count()
+	delivered = orders.filter(status='Delivered').count()
+	pending = orders.filter(status='Pending').count()
+	
+	context = {'orders':orders, 'customers':customers,
+	'total_orders':total_orders,'delivered':delivered,
+	'pending':pending, 'total_customers':total_customers }
+
+	return render(request, 'accounts/visualisations.html', context)		
