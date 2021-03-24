@@ -21,49 +21,27 @@ class OrderForm(ModelForm):
 class CreateUserForm(UserCreationForm):
 	class Meta:
 		model = User
-		fields = ['username', 'email', 'password1', 'password2']
+		fields = '__all__'
 
 class ProductForm(forms.ModelForm):
 	class Meta:
 		model = Product
-		fields = [
-			'name',
-			'price',
-			'category',
-			'description',
-			'product_note',
-			'productimage',
-			'value',
-			'qty',
-			'value',
-		]
+		fields = '__all__'
 
 class OrderCreateForm(forms.ModelForm):
 	class Meta:
 		model = Order
-		fields = [
-			'customer',
-			'product',
-			'status',
-		]
+		fields = '__all__'
 
 class TagCreateForm(forms.ModelForm):
 	class Meta:
 		model = Tag
-		fields = [
-			'name',
-		]
+		fields = '__all__'
 
 class CustomerCreateForm(forms.ModelForm):
 	class Meta:
 		model = Customer
-		fields = [
-			'name',
-			'phone',
-			'email',
-			'profile_pic',
-			'customeraddress'
-		]
+		fields = '__all__'
 
 class CustomerAddressCreateForm(forms.ModelForm):
 	class Meta:

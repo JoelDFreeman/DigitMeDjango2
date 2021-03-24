@@ -376,12 +376,13 @@ def visualisations(request):
 	total_customers = customers.count()
 
 	total_orders = orders.count()
+
 	delivered = orders.filter(status='Delivered').count()
 	pending = orders.filter(status='Pending').count()
-	
+
 	context = {'orders':orders, 'customers':customers,
 	'total_orders':total_orders,'delivered':delivered,
-	'pending':pending, 'total_customers':total_customers }
+	'pending':pending, 'total_customers':total_customers}
 
 	return render(request, 'accounts/visualisations.html', context)		
 

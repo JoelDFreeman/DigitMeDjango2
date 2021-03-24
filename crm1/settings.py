@@ -39,8 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'accounts.apps.AccountsConfig',
-
+    
     'django_filters',
+    'django_tables2',
+    'pandas',
+    'numpy',
+    'matplot',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +134,5 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+CURRENCY = '£'
